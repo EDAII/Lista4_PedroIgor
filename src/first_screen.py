@@ -1,15 +1,16 @@
 import pygame
 from pygame.locals import *
+from src import start_game
 
 def begin():
     pygame.init()
 
     init_sound = pygame.mixer.Sound("snd/init.wav")
-    #init_sound.play(-1)
+    init_sound.play(-1)
 
-    screen_size = (705, 462)
+    screen_size = (710, 512)
     screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption('Sort the cards')
+    pygame.display.set_caption('Heap Sort')
     pygame.font.init()  # you have to call this at the start,
     # if you want to use this module.
     my_font = pygame.font.SysFont('bold', 80)
@@ -23,13 +24,13 @@ def begin():
     # INSTRUCTIONS
     ins_font = pygame.font.SysFont('bold', 50)
     ins_texts = []
-    ins_texts.append(ins_font.render("Como jogar:", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("Seu objetivo é ordenar as cartas", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("fazendo o mínimo de trocas.", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("Para realizar uma troca basta clicar", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("em duas cartas diferentes.", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("Para deselecionar a primeira carta", False, (255, 255, 255)))
-    ins_texts.append(ins_font.render("basta clicar novamente sobre ela.", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("Será feita a ordenação de 15 valores", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("por meio do algoritmo Heap Sort", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("É possível visualizar no topo o vetor", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("original criado de forma aleatória,", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("ao centro o Max Heap de cada iteração", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("e logo abaixo o vetor ordenado", False, (255, 255, 255)))
+    ins_texts.append(ins_font.render("adicionando a raiz do Heap a cada passo.", False, (255, 255, 255)))
 
     while True:
         for event in pygame.event.get():
@@ -40,10 +41,10 @@ def begin():
                 init_sound.stop()
                 if pygame.mouse.get_pos()[0] >= 600 and pygame.mouse.get_pos()[1]>=390:
                     if pygame.mouse.get_pos()[0] <= 647 and pygame.mouse.get_pos()[1]<=425:
-                        return
+                        start_game.start()
         pygame.display.update()
         screen.fill((150, 65, 200))
-        text_surface = my_font.render("Sort the Cards", False, (255, 255, 255))
+        text_surface = my_font.render("Heap Sort", False, (255, 255, 255))
         start_text_surface = start_font.render("START", False, (255, 0, 0))
         screen.blit(text_surface, (80,10))
         screen.blit(start_button_skin, (599, 390))
@@ -54,7 +55,7 @@ def begin():
         i = 1
         for ins in ins_texts:
             screen.blit(ins, (20,pos_y))
-            if i%2 == 1:
+            if i == 2:
                 pos_y+=20
             i += 1
             pos_y+=40

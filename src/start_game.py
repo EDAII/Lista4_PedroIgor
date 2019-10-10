@@ -1,20 +1,19 @@
 import pygame
 from pygame.locals import *
-from math import ceil
 from src import numbers_gen
 import copy
 from src import sort_algs
-from src import machine_game
+from src import first_screen
 import time
 def start():
     pygame.init()
 
     screen_size = (1070, 650)
     start_music = pygame.mixer.Sound("snd/start.wav")
-    #start_music.play(-1)
+    start_music.play(-1)
 
     screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption('Sort the cards')
+    pygame.display.set_caption('Heap Sort')
 
     w = 10
     card_pos = []
@@ -22,12 +21,12 @@ def start():
     while w < 1060:
         card_pos.append((w, 50))
         w += 70
-    print(len(card_pos))
 
     myfont = pygame.font.SysFont('bold', 48)
     title_texts = []
     title_texts.append(myfont.render("Vetor Original: ", False, (255,255,255)))
     title_texts.append(myfont.render("Max Heap: ", False, (255, 255, 255)))
+    title_texts.append(myfont.render("Vetor Ordenado: ", False, (255, 255, 255)))
 
 
     # criando superfície das cartas
@@ -59,6 +58,7 @@ def start():
         screen.fill((0, 0, 0))
         screen.blit(title_texts[0], (10, 10))
         screen.blit(title_texts[1], (10, 150))
+        screen.blit(title_texts[2], (10, 523))
         i = 0
         while i < len(card_pos):
             show = card_skin
@@ -74,67 +74,81 @@ def start():
             number_surface = myfont.render(str(dict[pos]), False, (255, 255, 255))
             screen.blit(number_surface, (pos[0] + 2, pos[1] + 30))
 
-        heap_parent = []
-        heap_children = []
-        heap_g_children = []
-        heap_g_g_children = []
         if i_sort < len(heaps):
-            print('heap')
-            print(heaps[i_sort])
             heap_parent = heaps[i_sort][0]
-            print('parent')
-            print(heap_parent)
-            screen.blit(card_skin, (500,180))
+            screen.blit(card_skin_second, (500,150))
             number_surface = myfont.render(str(heap_parent), False, (255, 255, 255))
-            screen.blit(number_surface, (502, 210))
+            screen.blit(number_surface, (502, 180))
 
             if len(heaps[i_sort]) > 1:
                 if len(heaps[i_sort]) >= 3:
                     heap_children = heaps[i_sort][1:3]
-                    screen.blit(card_skin, (780, 300))
+                    show = card_skin
+                    if len(heaps[i_sort]) == 3:
+                        show = card_skin_first
+                    screen.blit(show, (780, 240))
                     number_surface = myfont.render(str(heap_children[1]), False, (255, 255, 255))
-                    screen.blit(number_surface, (782, 330))
+                    screen.blit(number_surface, (782, 270))
                 else:
                     heap_children = heaps[i_sort][1]
                     if type(heap_children)!=list:
                         heap_children = [heap_children]
-
-                print('children')
-                print(heap_children)
-                screen.blit(card_skin, (220, 300))
+                show = card_skin
+                if len(heaps[i_sort]) == 2:
+                    show = card_skin_first
+                screen.blit(show, (220, 240))
                 number_surface = myfont.render(str(heap_children[0]), False, (255, 255, 255))
-                screen.blit(number_surface, (222, 330))
+                screen.blit(number_surface, (222, 270))
 
             if len(heaps[i_sort]) > 3:
                 if len(heaps[i_sort]) >= 7:
                     heap_g_children = heaps[i_sort][3:7]
                 else:
                     heap_g_children = heaps[i_sort][3:len(heaps[i_sort])]
-                print('g_children')
-                print(heap_g_children)
                 pos_x = 80
                 h = 0
                 for h in heap_g_children:
-                    screen.blit(card_skin, (pos_x, 400))
+                    show = card_skin
+                    if h == heap_g_children[len(heap_g_children) - 1] and len(heaps[i_sort]) <= 7:
+                        show = card_skin_first
+                    screen.blit(show, (pos_x, 335))
                     number_surface = myfont.render(str(h), False, (255, 255, 255))
-                    screen.blit(number_surface, (pos_x+2, 430))
+                    screen.blit(number_surface, (pos_x+2, 365))
                     pos_x+=280
 
 
             if len(heaps[i_sort]) > 7:
                 heap_g_g_children = heaps[i_sort][7:len(heaps[i_sort])]
-                print('g_g_children')
-                print(heap_g_g_children)
                 pos_x = 10
                 for h in heap_g_g_children:
-                    screen.blit(card_skin, (pos_x, 500))
+                    show = card_skin
+                    if h == heap_g_g_children[len(heap_g_g_children) - 1]:
+                        show = card_skin_first
+                    screen.blit(show, (pos_x, 430))
                     number_surface = myfont.render(str(h), False, (255, 255, 255))
-                    screen.blit(number_surface, (pos_x + 2, 530))
+                    screen.blit(number_surface, (pos_x + 2, 460))
                     pos_x += 140
-        i_sort+=1
-
-
-
+            pos_x = 10
+            if i_sort > 0:
+                for s in sorts[i_sort-1]:
+                    screen.blit(card_skin, (pos_x, 560))
+                    number_surface = myfont.render(str(s), False, (255, 255, 255))
+                    screen.blit(number_surface, (pos_x + 2, 590))
+                    pos_x+=70
+            i_sort+=1
+        if i_sort == len(heaps)+1:
+            pos_x = 10
+            for s in sorted_numbers:
+                screen.blit(card_skin, (pos_x, 560))
+                number_surface = myfont.render(str(s), False, (255, 255, 255))
+                screen.blit(number_surface, (pos_x + 2, 590))
+                pos_x += 70
+            pygame.display.update()
+            time.sleep(3)
+            start_music.stop()
+            first_screen.begin()
+        if i_sort == len(heaps):
+            i_sort+=1
 
         pygame.display.update()
         time.sleep(3)
