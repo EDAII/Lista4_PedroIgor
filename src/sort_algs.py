@@ -24,7 +24,7 @@ def build_max_heap(lista):
         return build_max_heap(lista)
     return lista
 
-def heap_sort(heap, s_lista = [], all_max_heap = [], all_s_lista=[]):
+def heap_sort(heap, s_lista, all_max_heap, all_s_lista):
     heap = build_max_heap(heap)
     all_max_heap.append(copy.copy(heap))
     heap[0], heap[len(heap)-1] = heap[len(heap)-1], heap[0]

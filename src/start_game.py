@@ -4,6 +4,7 @@ from src import numbers_gen
 import copy
 from src import sort_algs
 from src import first_screen
+
 import time
 def start():
     pygame.init()
@@ -43,7 +44,13 @@ def start():
     dict = {}
     numbers = numbers_gen.numbers_gen()
     copy_numbers = copy.copy(numbers)
-    sorted_numbers, heaps, sorts = sort_algs.heap_sort(copy_numbers)
+    sorted_numbers = []
+    heaps = []
+    sorts = []
+    sorted_numbers, heaps, sorts = sort_algs.heap_sort(copy_numbers, sorted_numbers, heaps,sorts)
+    sorts+=[sorted_numbers]
+    sorts = []+sorts
+    heaps=heaps+[[]]
     i = 0
     i_sort = 0
     while i < len(numbers):
@@ -75,10 +82,11 @@ def start():
             screen.blit(number_surface, (pos[0] + 2, pos[1] + 30))
 
         if i_sort < len(heaps):
-            heap_parent = heaps[i_sort][0]
-            screen.blit(card_skin_second, (500,150))
-            number_surface = myfont.render(str(heap_parent), False, (255, 255, 255))
-            screen.blit(number_surface, (502, 180))
+            if heaps[i_sort] != []:
+                heap_parent = heaps[i_sort][0]
+                screen.blit(card_skin_second, (500,150))
+                number_surface = myfont.render(str(heap_parent), False, (255, 255, 255))
+                screen.blit(number_surface, (502, 180))
 
             if len(heaps[i_sort]) > 1:
                 if len(heaps[i_sort]) >= 3:
@@ -136,19 +144,10 @@ def start():
                     screen.blit(number_surface, (pos_x + 2, 590))
                     pos_x+=70
             i_sort+=1
-        if i_sort == len(heaps)+1:
-            pos_x = 10
-            for s in sorted_numbers:
-                screen.blit(card_skin, (pos_x, 560))
-                number_surface = myfont.render(str(s), False, (255, 255, 255))
-                screen.blit(number_surface, (pos_x + 2, 590))
-                pos_x += 70
-            pygame.display.update()
+        pygame.display.update()
+        if i_sort == len(heaps):
             time.sleep(3)
             start_music.stop()
             first_screen.begin()
-        if i_sort == len(heaps):
-            i_sort+=1
 
-        pygame.display.update()
         time.sleep(3)

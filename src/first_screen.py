@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *
 from src import start_game
-
 def begin():
     pygame.init()
 
@@ -38,9 +37,9 @@ def begin():
                 pygame.quit()
                 exit()
             elif event.type == MOUSEBUTTONDOWN:
-                init_sound.stop()
                 if pygame.mouse.get_pos()[0] >= 600 and pygame.mouse.get_pos()[1]>=390:
                     if pygame.mouse.get_pos()[0] <= 647 and pygame.mouse.get_pos()[1]<=425:
+                        init_sound.stop()
                         start_game.start()
         pygame.display.update()
         screen.fill((150, 65, 200))
