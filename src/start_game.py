@@ -51,16 +51,28 @@ def start():
     sorts+=[sorted_numbers]
     sorts = []+sorts
     heaps=heaps+[[]]
+
+    start_font = pygame.font.SysFont('bold', 22)
+    start_button_skin = pygame.Surface((50, 35))
+    start_button_skin.fill((255, 255, 255))
+    start_text_surface = start_font.render("NEXT", False, (0, 0, 255))
+
     i = 0
     i_sort = 0
     while i < len(numbers):
         dict[card_pos[i]] = numbers[i]
         i+=1
+    next = False
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 exit()
+            if event.type == MOUSEBUTTONDOWN:
+                mouse_position = pygame.mouse.get_pos()
+                if mouse_position[0] >= 1000 and mouse_position[0] >= 10:
+                    if mouse_position[1] <= 1050 and mouse_position[1] <= 45:
+                        next = True
 
         screen.fill((0, 0, 0))
         screen.blit(title_texts[0], (10, 10))
@@ -76,7 +88,6 @@ def start():
             screen.blit(show, card_pos[i])
 
             i += 1
-
         for pos in card_pos:
             number_surface = myfont.render(str(dict[pos]), False, (255, 255, 255))
             screen.blit(number_surface, (pos[0] + 2, pos[1] + 30))
@@ -143,11 +154,13 @@ def start():
                     number_surface = myfont.render(str(s), False, (255, 255, 255))
                     screen.blit(number_surface, (pos_x + 2, 590))
                     pos_x+=70
-            i_sort+=1
+            if next:
+                i_sort+=1
+                next = False
+
+        screen.blit(start_button_skin, (1000, 10))
+        screen.blit(start_text_surface, (1005, 20))
         pygame.display.update()
         if i_sort == len(heaps):
-            time.sleep(3)
             start_music.stop()
             first_screen.begin()
-
-        time.sleep(3)
