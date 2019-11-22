@@ -1,5 +1,5 @@
 # Demo: Heap Sort
-Será feita a demonstração visual do algoritmo de ordenação heap sort mostrando em cada passo o max heap gerado.
+Será feita a demonstração visual do algoritmo de ordenação heap sort mostrando em cada passo primeiramente o algoritmo Build Heap e após gerado o Max Heap, o max heap resultante de cada remoção da raiz.
 # Como executar:
 É necessário ter o python3 e o pygame instalados. É fortemente recomendada a utilização de um ambiente virtual para executar o jogo evitando bugs tanto na execução quanto nos arquivos do computador. Para instalar o pygame é necessário o pip3. E dar o seguinte comando:
 ```

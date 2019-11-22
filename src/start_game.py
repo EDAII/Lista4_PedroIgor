@@ -47,7 +47,7 @@ def start():
     sorted_numbers = []
     heaps = []
     sorts = []
-    sorted_numbers, heaps, sorts = sort_algs.heap_sort(copy_numbers, sorted_numbers, heaps,sorts)
+    sorted_numbers, heaps, sorts = sort_algs.heap_sort(copy_numbers, sorted_numbers, sorts)
     sorts+=[sorted_numbers]
     sorts = []+sorts
     heaps=heaps+[[]]
@@ -59,6 +59,7 @@ def start():
 
     i = 0
     i_sort = 0
+    i_heap = 0
     while i < len(numbers):
         dict[card_pos[i]] = numbers[i]
         i+=1
@@ -134,8 +135,6 @@ def start():
                     number_surface = myfont.render(str(h), False, (255, 255, 255))
                     screen.blit(number_surface, (pos_x+2, 365))
                     pos_x+=280
-
-
             if len(heaps[i_sort]) > 7:
                 heap_g_g_children = heaps[i_sort][7:len(heaps[i_sort])]
                 pos_x = 10
@@ -148,8 +147,14 @@ def start():
                     screen.blit(number_surface, (pos_x + 2, 460))
                     pos_x += 140
             pos_x = 10
-            if i_sort > 0:
-                for s in sorts[i_sort-1]:
+
+            try:
+                if len(heaps[i_sort]) > len(heaps[i_sort+1]) and next:
+                    i_heap+=1
+            except:
+                i_heap = i_heap
+            if i_heap > 0:
+                for s in sorts[i_heap-1]:
                     screen.blit(card_skin, (pos_x, 560))
                     number_surface = myfont.render(str(s), False, (255, 255, 255))
                     screen.blit(number_surface, (pos_x + 2, 590))
@@ -162,5 +167,6 @@ def start():
         screen.blit(start_text_surface, (1005, 20))
         pygame.display.update()
         if i_sort == len(heaps):
+            sort_algs.all_max_heap.clear()
             start_music.stop()
             first_screen.begin()
